@@ -11,6 +11,9 @@ inputs:
   splight_platform_api_host:
     description: "Splight platform API endpoint."
     required: false
+  spec_file:
+    description: "Path to the component's configuration file ("spec.json")."
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
