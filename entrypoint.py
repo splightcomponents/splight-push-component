@@ -58,8 +58,7 @@ def find_files(expr: str) -> List:
     the parent directory of each one.
     """
     files = glob.glob(expr, recursive=True)
-    dirs = [os.path.dirname(file) for file in files]
-    return dirs
+    return files
 
 
 def main() -> None:
