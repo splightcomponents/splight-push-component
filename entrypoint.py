@@ -16,7 +16,7 @@ def load_config() -> Dict:
         "SPLIGHT_ACCESS_ID": os.environ["INPUT_SPLIGHT_ACCESS_ID"],
         "SPLIGHT_SECRET_KEY": os.environ["INPUT_SPLIGHT_SECRET_KEY"],
     }
-
+    logging.info(config)
     if os.environ["INPUT_SPLIGHT_PLATFORM_API_HOST"]:
         config["SPLIGHT_PLATFORM_API_HOST"] = os.environ["INPUT_SPLIGHT_PLATFORM_API_HOST"]
     return config
@@ -55,7 +55,7 @@ def main() -> None:
     if not os.path.isfile(spec_file):
         raise FileNotFoundError("No 'spec.json' was found inside the repository.")
 
-    push_component(os.path.dirname(spec_file))
+    push_component(os.path.dirname(os.path.abspath(spec_file)))
 
 
 if __name__ == "__main__":
