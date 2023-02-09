@@ -9,7 +9,7 @@ from typing import Dict, List
 logging.basicConfig(level=logging.INFO)
 
 
-def load_secrets() -> Dict:
+def load_config() -> Dict:
     config = {
         "SPLIGHT_ACCESS_ID": os.environ["INPUT_SPLIGHT_ACCESS_ID"],
         "SPLIGHT_SECRET_KEY": os.environ["INPUT_SPLIGHT_SECRET_KEY"],
@@ -29,35 +29,24 @@ def configure_cli(config: Dict) -> None:
         raise Exception(error)
     logging.info("Configuration successful.")
 
-def push_component(components: List):
-    for path in components:
-        print(f"Starting with {path}...")
-        cmd = ["splight", "hub", "component", "push", f"{path}", "-f"]
-        p = subprocess.Popen(cmd)
-        p.wait()
-        if p.returncode != 0:
-            raise Exception("Error unexpected pushing component.")
-        logging.info(f"Component at {path} uploaded successfully.")
+def push_component(path: str) -> None:
+    print(f"Tring to push component at {path}...")
+    cmd = ["splight", "hub", "component", "push", f"{path}", "-f"]
+    p = subprocess.Popen(cmd)
+    p.wait()
+    if p.returncode != 0:
+        raise Exception("Error unexpected pushing component.")
+    logging.info(f"Component at {path} uploaded successfully.")
 
 def main() -> None:
-    config = load_secrets()
+    config = load_config()
     configure_cli(config)
     
-    if not os.path.isfile(os.environ["INPUT_SPEC_FILE"]):
-        raise Exception("No 'spec.json' was found inside the repository.")
-    logging.info(f"Found these components: {components}.")
+    spec_file = os.path.isfile(os.environ["INPUT_SPEC_FILE"])
+    if not spec_file:
+        raise FileNotFoundError("No 'spec.json' was found inside the repository.")
 
-    changed_files = load_wsv(".github/outputs/all_changed_and_modified_files.txt")
-    logging.info(f"Changed files are: {changed_files}")
-    
-    to_update = modified_roots(components, changed_files)
-    if not to_update:
-        logging.warning("No component was modified.")
-        return
-    print(f"The following components will be updated: {list(to_update)}.")
-    
-    push_component(to_update)
-    logging.info("Done.")
+    push_component(os.path.dirname(spec_file))
 
 if __name__ == "__main__":
     main()
