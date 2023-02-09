@@ -9,7 +9,21 @@ This action will look up all the Splight Components configuration files ("spec.j
 ## Usage
 
 ```yml
-asd<asd
+name: Example usage
+on:
+  push:
+    branches:
+      - mybranch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: splightcomponents/splight-push-component@master # Or any other branch/tag
+      with:
+        spec_file: "./spec.json"
+        splight_access_id: ${{ secrets.MY_SECRET_ACCESS_ID }}
+        splight_secret_key: ${{ secrets.MY_SECRET_KEY }}
 ```
 
 ## Development
