@@ -2,12 +2,9 @@ import os
 
 
 def main():
-    my_input = os.environ["INPUT_MYINPUT"]
+    my_input = os.environ["INPUT_SPEC_FILE"]
 
-    my_output = f"Hello {my_input}"
-
-    print(f"::set-output name=myOutput::{my_output}")
-
+    print(my_input)
 
 if __name__ == "__main__":
     main()

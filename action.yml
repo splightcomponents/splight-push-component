@@ -11,8 +11,14 @@ inputs:
   splight_platform_api_host:
     description: "Splight platform API endpoint."
     required: false
+  spec_file:
+    description: "Path to the component's configuration file ("spec.json")."
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.who-to-greet }}
+    - ${{ inputs.splight_access_id }}
+    - ${{ inputs.splight_secret_key }}
+    - ${{ inputs.splight_platform_api_host }}
+    - ${{ inputs.spec_file }}
