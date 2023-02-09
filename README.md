@@ -21,7 +21,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: splightcomponents/splight-push-component@master # Or any other branch/tag
       with:
-        splight_access_id: ${{ secrets.MY_SECRET_ACCESS_ID }}
+        splight_access_id: ${{ secrets.MY_SECRET_ACCESS_ID }} # Your credentials as action secrets
         splight_secret_key: ${{ secrets.MY_SECRET_KEY }}
 ```
 
