@@ -42,8 +42,8 @@ def main() -> None:
     config = load_config()
     configure_cli(config)
     
-    spec_file = os.path.isfile(os.environ["INPUT_SPEC_FILE"])
-    if not spec_file:
+    spec_file = os.environ["INPUT_SPEC_FILE"]
+    if not os.path.isfile(spec_file):
         raise FileNotFoundError("No 'spec.json' was found inside the repository.")
 
     push_component(os.path.dirname(spec_file))
