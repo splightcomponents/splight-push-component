@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 import json
-import os
 import logging
+import os
 import subprocess
-from typing import Dict, List
+from typing import Dict
 
 logging.basicConfig(level=logging.INFO)
 
@@ -19,6 +19,7 @@ def load_config() -> Dict:
         config["SPLIGHT_PLATFORM_API_HOST"] = os.environ["INPUT_SPLIGHT_PLATFORM_API_HOST"]
     return config
 
+
 def configure_cli(config: Dict) -> None:
     p = subprocess.Popen(
         ["splight", "configure", "--from-json", json.dumps(config)],
@@ -28,6 +29,7 @@ def configure_cli(config: Dict) -> None:
     if error:
         raise Exception(error)
     logging.info("Configuration successful.")
+
 
 def push_component(path: str) -> None:
     print(f"Tring to push component at {path}...")
@@ -39,15 +41,17 @@ def push_component(path: str) -> None:
         raise Exception("Error unexpected pushing component.")
     logging.info(f"Component at {path} uploaded successfully.")
 
+
 def main() -> None:
     config = load_config()
     configure_cli(config)
-    
+
     spec_file = os.environ["INPUT_SPEC_FILE"]
     if not os.path.isfile(spec_file):
         raise FileNotFoundError("No 'spec.json' was found inside the repository.")
 
     push_component(os.path.dirname(spec_file))
+
 
 if __name__ == "__main__":
     main()

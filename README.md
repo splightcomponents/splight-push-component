@@ -11,3 +11,10 @@ This action will look up all the Splight Components configuration files ("spec.j
 ```yml
 asd<asd
 ```
+
+## Development
+```bash
+pip install pre-commit
+pre-commit install-hooks
+```
+
