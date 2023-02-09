@@ -1,5 +1,3 @@
 FROM python:3.10-slim
-
-ADD . /action
-WORKDIR /action
-CMD python main.py
+COPY main.py /action/main.py
+CMD ["python", "/action/main.py"]
