@@ -19,7 +19,7 @@ def load_secrets() -> Dict:
     json_configuration = {
         "SPLIGHT_ACCESS_ID": environ["SPLIGHT_ACCESS_ID"],
         "SPLIGHT_SECRET_KEY": environ["SPLIGHT_SECRET_KEY"],
-        "SPLIGHT_PLATFORM_API_HOST": environ["SPLIGHT_PLATFORM_API_HOST"] # TODO esto sacarlo cuando esta en prod. los clientes no van a tener esa var
+        "SPLIGHT_PLATFORM_API_HOST": environ["SPLIGHT_PLATFORM_API_HOST"] # TODO: usarlo o no dependiendo si nos lo dan o no. Debe ser input no secret
     }
     return json_configuration
 

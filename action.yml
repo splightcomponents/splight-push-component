@@ -2,12 +2,17 @@ name: "Splight Push Component"
 description: "Automatically find updated components and push them to Splight Hub."
 author: "Marco Martinelli"
 inputs:
-  myInput:
-    description: "Input to use"
-    default: "world"
-outputs:
-  myOutput:
-    description: "Output from the action"
+  splight_access_id:
+    description: "Splight Hub access key id."
+    required: false # TODO: a true
+  splight_secret_key:
+    description: "Splight Hub private key."
+    required: false # TODO: a true
+  splight_platform_api_host:
+    description: "Splight platform API endpoint."
+    required: false
 runs:
-  using: "docker"
-  image: "Dockerfile"
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.who-to-greet }}
