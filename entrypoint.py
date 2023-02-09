@@ -35,6 +35,7 @@ def push_component(path: str) -> None:
     p = subprocess.Popen(cmd)
     p.wait()
     if p.returncode != 0:
+        logging.error(p.communicate()[0])
         raise Exception("Error unexpected pushing component.")
     logging.info(f"Component at {path} uploaded successfully.")
 
