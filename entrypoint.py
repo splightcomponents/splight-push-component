@@ -43,7 +43,7 @@ def configure_cli(config: Dict) -> None:
 
 def push_component(path: str) -> None:
     """Push component using Splight CLI."""
-    logging.info("Tring to push component at %s...", path)
+    logging.info("Tring to push component at '%s' ...", path)
     cmd = ["/usr/local/bin/splight", "hub", "component", "push", path, "-f"]
     with subprocess.Popen(cmd) as p:
         p.wait()
@@ -67,8 +67,6 @@ def main() -> None:
     configure_cli(config.dict())
 
     files = find_files("./**/spec.json")
-    logging.info("Found these components: %s", files)
-
     if len(files) == 0:
         raise FileNotFoundError(
             "No 'spec.json' was found inside the repository."
