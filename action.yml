@@ -2,12 +2,12 @@ name: "Splight Push Component"
 description: "Automatically find updated components and push them to Splight Hub."
 author: "Marco Martinelli"
 inputs:
-  splight_access_id:
+  splight_access_id: # TODO: a true
     description: "Splight Hub access key id."
-    required: false # TODO: a true
+    required: false
   splight_secret_key:
     description: "Splight Hub private key."
-    required: false # TODO: a true
+    required: false
   splight_platform_api_host:
     description: "Splight platform API endpoint."
     required: false
