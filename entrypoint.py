@@ -66,7 +66,9 @@ def main() -> None:
     config = Config()
     configure_cli(config.dict())
 
-    files = find_files("spec.json")
+    files = find_files("./**/spec.json")
+    logging.info("Found these components: %s", files)
+
     if len(files) == 0:
         raise FileNotFoundError(
             "No 'spec.json' was found inside the repository."
