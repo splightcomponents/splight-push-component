@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Github action entry point script."""
 
 import json
 import logging
@@ -10,6 +11,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 def load_config() -> Dict:
+    """Load secrets from action input arguments."""
     config = {
         "SPLIGHT_ACCESS_ID": os.environ["INPUT_SPLIGHT_ACCESS_ID"],
         "SPLIGHT_SECRET_KEY": os.environ["INPUT_SPLIGHT_SECRET_KEY"],
@@ -21,28 +23,31 @@ def load_config() -> Dict:
 
 
 def configure_cli(config: Dict) -> None:
-    p = subprocess.Popen(
-        ["splight", "configure", "--from-json", json.dumps(config)],
+    """Load configuration to Splight CLI."""
+    with subprocess.Popen(
+        ["/usr/local/bin/splight", "configure", "--from-json", json.dumps(config)],
         stdout=subprocess.DEVNULL,
-    )
-    _, error = p.communicate()
-    if error:
-        raise Exception(error)
+    ) as p:
+        _, error = p.communicate()
+        if error:
+            raise ChildProcessError(error)
     logging.info("Configuration successful.")
 
 
 def push_component(path: str) -> None:
-    print(f"Tring to push component at {path}...")
-    cmd = ["splight", "hub", "component", "push", f"{path}", "-f"]
-    p = subprocess.Popen(cmd)
-    p.wait()
-    if p.returncode != 0:
-        logging.error(p.communicate()[0])
-        raise Exception("Error unexpected pushing component.")
-    logging.info(f"Component at {path} uploaded successfully.")
+    """Push component using Splight CLI."""
+    logging.info("Tring to push component at %s...", path)
+    cmd = ["/usr/local/bin/splight", "hub", "component", "push", path, "-f"]
+    with subprocess.Popen(cmd) as p:
+        p.wait()
+        if p.returncode != 0:
+            logging.error(p.communicate()[0])
+            raise ChildProcessError("Error unexpected pushing component.")
+    logging.info("Component at %s uploaded successfully.", path)
 
 
 def main() -> None:
+    """Main process."""
     config = load_config()
     configure_cli(config)
 
