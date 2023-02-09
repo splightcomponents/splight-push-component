@@ -21,7 +21,6 @@ jobs:
     - uses: actions/checkout@v3
     - uses: splightcomponents/splight-push-component@master # Or any other branch/tag
       with:
-        spec_file: "./spec.json"
         splight_access_id: ${{ secrets.MY_SECRET_ACCESS_ID }}
         splight_secret_key: ${{ secrets.MY_SECRET_KEY }}
 ```
