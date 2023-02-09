@@ -1,10 +1,10 @@
 # Splight Push Components
 
-Automatically find all components in your repository and update them if necessary.
+Automatically find all components in your repository and update them.
 
 ## Description
 
-This action will look up all the Splight Components configuration files ("spec.json") present in your repository, and for each component, will verify if a file has changed inside the corresponding directories and push or not accordingly.
+This action will look up all the Splight Components configuration files ("spec.json") present in your repository, and for each component, will verify if a file has changed inside the corresponding directories and push or not accordingly. TODO: review
 
 ## Usage
 

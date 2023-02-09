@@ -1,31 +1,38 @@
 #!/usr/bin/env python3
 """Github action entry point script."""
 
+import glob
 import json
 import logging
 import os
 import subprocess
-from typing import Dict
+from typing import Dict, List
+
+from pydantic import BaseSettings, Field
 
 logging.basicConfig(level=logging.INFO)
 
 
-def load_config() -> Dict:
-    """Load secrets from action input arguments."""
-    config = {
-        "SPLIGHT_ACCESS_ID": os.environ["INPUT_SPLIGHT_ACCESS_ID"],
-        "SPLIGHT_SECRET_KEY": os.environ["INPUT_SPLIGHT_SECRET_KEY"],
-    }
-    logging.info(config)
-    if os.environ["INPUT_SPLIGHT_PLATFORM_API_HOST"]:
-        config["SPLIGHT_PLATFORM_API_HOST"] = os.environ["INPUT_SPLIGHT_PLATFORM_API_HOST"]
-    return config
+class Config(BaseSettings):  # pylint: disable=R0903
+    """Splight CLI configuration parameters."""
+
+    SPLIGHT_ACCESS_ID: str
+    SPLIGHT_SECRET_KEY: str
+    SPLIGHT_PLATFORM_API_HOST: str = Field(
+        "https://api.splight-ai.com",
+        env="INPUT_SPLIGHT_PLATFORM_API_HOST",
+    )
 
 
 def configure_cli(config: Dict) -> None:
     """Load configuration to Splight CLI."""
     with subprocess.Popen(
-        ["/usr/local/bin/splight", "configure", "--from-json", json.dumps(config)],
+        [
+            "/usr/local/bin/splight",
+            "configure",
+            "--from-json",
+            json.dumps(config),
+        ],
         stdout=subprocess.DEVNULL,
     ) as p:
         _, error = p.communicate()
@@ -46,16 +53,29 @@ def push_component(path: str) -> None:
     logging.info("Component at %s uploaded successfully.", path)
 
 
+def find_files(expr: str) -> List:
+    """Find files matching the given expression and return
+    the parent directory of each one.
+    """
+    files = glob.glob(expr, recursive=True)
+    dirs = [os.path.dirname(file) for file in files]
+    return dirs
+
+
 def main() -> None:
     """Main process."""
-    config = load_config()
-    configure_cli(config)
+    config = Config()
+    configure_cli(config.dict())
 
-    spec_file = os.environ["INPUT_SPEC_FILE"]
-    if not os.path.isfile(spec_file):
-        raise FileNotFoundError("No 'spec.json' was found inside the repository.")
+    files = find_files("spec.json")
+    if len(files) == 0:
+        raise FileNotFoundError(
+            "No 'spec.json' was found inside the repository."
+        )
+    logging.info("Found these components: %s", files)
 
-    push_component(os.path.dirname(os.path.abspath(spec_file)))
+    for spec_file in files:
+        push_component(os.path.dirname(os.path.abspath(spec_file)))
 
 
 if __name__ == "__main__":

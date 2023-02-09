@@ -21,4 +21,3 @@ runs:
     - ${{ inputs.splight_access_id }}
     - ${{ inputs.splight_secret_key }}
     - ${{ inputs.splight_platform_api_host }}
-    - ${{ inputs.spec_file }}
