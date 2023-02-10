@@ -45,11 +45,10 @@ def push_component(path: str) -> None:
     """Push component using Splight CLI."""
     logging.info("Tring to push component at '%s' ...", path)
     cmd = ["/usr/local/bin/splight", "hub", "component", "push", path, "-f"]
-    with subprocess.Popen(cmd) as p:
+    with subprocess.Popen(cmd, stdout=subprocess.DEVNULL) as p:
         p.wait()
         if p.returncode != 0:
-            logging.error(p.communicate()[0])
-            raise ChildProcessError("Error unexpected pushing component.")
+            raise ChildProcessError("Error while pushing component.")
     logging.info("Component at %s uploaded successfully.", path)
 
 
