@@ -1,5 +1,5 @@
 name: "Splight Push Component"
-description: "Automatically find updated components and push them to Splight Hub."
+description: "Automatically find components and upload them to Splight Hub."
 author: "Marco Martinelli"
 branding:
   icon: 'upload-cloud'
