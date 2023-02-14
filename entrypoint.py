@@ -8,7 +8,7 @@ import os
 import subprocess
 from typing import Dict, List
 
-from pydantic import BaseSettings, Field
+from pydantic import BaseSettings
 
 logging.basicConfig(level=logging.INFO)
 
@@ -18,10 +18,7 @@ class CLIConfig(BaseSettings):
 
     SPLIGHT_ACCESS_ID: str
     SPLIGHT_SECRET_KEY: str
-    SPLIGHT_PLATFORM_API_HOST: str = Field(
-        "https://api.splight-ai.com",
-        env="SPLIGHT_PLATFORM_API_HOST",
-    )
+    SPLIGHT_PLATFORM_API_HOST: str = "https://api.splight-ai.com"
 
     class Config:
         """Splight config settings."""
