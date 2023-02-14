@@ -13,15 +13,20 @@ from pydantic import BaseSettings, Field
 logging.basicConfig(level=logging.INFO)
 
 
-class Config(BaseSettings):  # pylint: disable=R0903
+class Config(BaseSettings):
     """Splight CLI configuration parameters."""
 
     SPLIGHT_ACCESS_ID: str
     SPLIGHT_SECRET_KEY: str
     SPLIGHT_PLATFORM_API_HOST: str = Field(
         "https://api.splight-ai.com",
-        env="INPUT_SPLIGHT_PLATFORM_API_HOST",
+        env="SPLIGHT_PLATFORM_API_HOST",
     )
+
+    class Config:
+        """Splight config settings."""
+
+        env_prefix = "INPUT_"
 
 
 def configure_cli(config: Dict) -> None:
