@@ -13,7 +13,7 @@ from pydantic import BaseSettings, Field
 logging.basicConfig(level=logging.INFO)
 
 
-class Config(BaseSettings):
+class CLIConfig(BaseSettings):
     """Splight CLI configuration parameters."""
 
     SPLIGHT_ACCESS_ID: str
@@ -67,7 +67,7 @@ def find_files(expr: str) -> List:
 
 def main() -> None:
     """Main process."""
-    config = Config()
+    config = CLIConfig()
     configure_cli(config.dict())
 
     files = find_files("./**/spec.json")
