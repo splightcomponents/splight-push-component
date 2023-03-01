@@ -1,0 +1,21 @@
+name: Code Quality
+on: pull_request
+jobs:
+  black:
+    runs-on: ubuntu-latest
+    name: Black
+    steps:
+      - uses: actions/checkout@v3
+      - uses: psf/black@stable
+        with:
+          options: "--config .hooks/black.toml --check --diff"
+          version: "23.1.0"
+  isort:
+    runs-on: ubuntu-latest
+    name: Isort
+    steps:
+      - uses: actions/checkout@v3
+      - uses: isort/isort-action@master
+        with:
+          configuration: "--settings-file=.hooks/isort.toml --check-only --diff"
+          isortVersion: "5.12.0"
