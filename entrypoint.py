@@ -65,6 +65,17 @@ def find_files(expr: str) -> List:
 def main() -> None:
     """Main process."""
     config = CLIConfig()
+
+    # I have to do this due to a bug in Github.
+    # Missing parameters in Github actions are
+    # passed as an empty string ("") instead
+    # of preventing the environment variable
+    # from being created.
+    # It should be deleted when it gets fixed.
+    # Issue: https://github.com/actions/runner/issues/924
+    if config.SPLIGHT_PLATFORM_API_HOST == "":
+        config.SPLIGHT_PLATFORM_API_HOST = "https://api.splight-ai.com"
+
     configure_cli(config.dict())
 
     files = find_files("./**/spec.json")
