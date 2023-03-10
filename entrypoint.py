@@ -70,7 +70,7 @@ def main() -> None:
     # Missing parameters in Github actions are
     # passed as an empty string ("") instead
     # of preventing the environment variable
-    # being created.
+    # from being created.
     # It should be deleted when it gets fixed.
     # Issue: https://github.com/actions/runner/issues/924
     if config.SPLIGHT_PLATFORM_API_HOST == "":
