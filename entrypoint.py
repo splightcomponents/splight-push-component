@@ -6,7 +6,7 @@ import json
 import logging
 import os
 import subprocess
-from typing import Dict, List
+from typing import Dict, List 
 
 from pydantic import BaseSettings
 
@@ -24,7 +24,6 @@ class CLIConfig(BaseSettings):
         """Splight config settings."""
 
         env_prefix = "INPUT_"
-
 
 def configure_cli(config: Dict) -> None:
     """Load configuration to Splight CLI."""
@@ -65,6 +64,19 @@ def find_files(expr: str) -> List:
 def main() -> None:
     """Main process."""
     config = CLIConfig()
+
+    # I have to do this due to a bug in Github.
+    # Missing parameters in Github actions are
+    # passed as an empty string ("") instead
+    # of preventing the environment variable
+    # being created.
+    # It should be deleted when it gets fixed.
+    # Issue: https://github.com/actions/runner/issues/924
+    if config.SPLIGHT_PLATFORM_API_HOST == "":
+        config.SPLIGHT_PLATFORM_API_HOST = "https://api.splight-ai.com"
+
+    # There is a bug on Github actions that forces
+    # me to do this:
     configure_cli(config.dict())
 
     files = find_files("./**/spec.json")
