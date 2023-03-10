@@ -76,8 +76,6 @@ def main() -> None:
     if config.SPLIGHT_PLATFORM_API_HOST == "":
         config.SPLIGHT_PLATFORM_API_HOST = "https://api.splight-ai.com"
 
-    # There is a bug on Github actions that forces
-    # me to do this:
     configure_cli(config.dict())
 
     files = find_files("./**/spec.json")
