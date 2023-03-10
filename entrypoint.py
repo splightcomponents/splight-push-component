@@ -6,7 +6,7 @@ import json
 import logging
 import os
 import subprocess
-from typing import Dict, List 
+from typing import Dict, List
 
 from pydantic import BaseSettings
 
@@ -24,6 +24,7 @@ class CLIConfig(BaseSettings):
         """Splight config settings."""
 
         env_prefix = "INPUT_"
+
 
 def configure_cli(config: Dict) -> None:
     """Load configuration to Splight CLI."""
