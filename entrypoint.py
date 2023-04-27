@@ -28,15 +28,13 @@ class CLIConfig(BaseSettings):
 
 def configure_cli(config: Dict) -> None:
     """Load configuration to Splight CLI."""
-    with subprocess.Popen(
-        [
+    cmd = [
             "/usr/local/bin/splight",
             "configure",
             "--from-json",
             json.dumps(config),
-        ],
-        stdout=subprocess.DEVNULL,
-    ) as p:
+        ]
+    with subprocess.Popen(cmd) as p:
         _, error = p.communicate()
         if error:
             raise ChildProcessError(error)
@@ -47,10 +45,10 @@ def push_component(path: str) -> None:
     """Push component using Splight CLI."""
     logging.info("Tring to push component at '%s' ...", path)
     cmd = ["/usr/local/bin/splight", "hub", "component", "push", path, "-f"]
-    with subprocess.Popen(cmd, stdout=subprocess.DEVNULL) as p:
-        p.wait()
-        if p.returncode != 0:
-            raise ChildProcessError("Error while pushing component.")
+    with subprocess.Popen(cmd) as p:
+        _, error = p.communicate()
+        if error:
+            raise ChildProcessError(f"Error while pushing component: {error}")
     logging.info("Component at %s uploaded successfully.", path)
 
 
@@ -66,6 +64,7 @@ def main() -> None:
     """Main process."""
     config = CLIConfig()
 
+
     # I have to do this due to a bug in Github.
     # Missing parameters in Github actions are
     # passed as an empty string ("") instead
@@ -73,6 +72,9 @@ def main() -> None:
     # from being created.
     # It should be deleted when it gets fixed.
     # Issue: https://github.com/actions/runner/issues/924
+    if not (config.SPLIGHT_ACCESS_ID and config.SPLIGHT_SECRET_KEY):
+        raise ValueError("Missing splight secrets.")
+
     if config.SPLIGHT_PLATFORM_API_HOST == "":
         config.SPLIGHT_PLATFORM_API_HOST = "https://api.splight-ai.com"
 
