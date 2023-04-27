@@ -29,12 +29,12 @@ class CLIConfig(BaseSettings):
 def configure_cli(config: Dict) -> None:
     """Load configuration to Splight CLI."""
     cmd = [
-            "/usr/local/bin/splight",
-            "configure",
-            "--from-json",
-            json.dumps(config),
-        ]
-    with subprocess.Popen(cmd) as p:
+        "/usr/local/bin/splight",
+        "configure",
+        "--from-json",
+        json.dumps(config),
+    ]
+    with subprocess.Popen(cmd, text=True) as p:
         _, error = p.communicate()
         if error:
             raise ChildProcessError(error)
@@ -45,7 +45,7 @@ def push_component(path: str) -> None:
     """Push component using Splight CLI."""
     logging.info("Tring to push component at '%s' ...", path)
     cmd = ["/usr/local/bin/splight", "hub", "component", "push", path, "-f"]
-    with subprocess.Popen(cmd) as p:
+    with subprocess.Popen(cmd, text=True) as p:
         _, error = p.communicate()
         if error:
             raise ChildProcessError(f"Error while pushing component: {error}")
@@ -63,7 +63,6 @@ def find_files(expr: str) -> List:
 def main() -> None:
     """Main process."""
     config = CLIConfig()
-
 
     # I have to do this due to a bug in Github.
     # Missing parameters in Github actions are
