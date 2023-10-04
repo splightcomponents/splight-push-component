@@ -18,7 +18,7 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
-    - uses: ./build_image_action
+    - uses: splightcomponents/splight-push-component/build_image_action@fix/push_action
       with:
         splight_access_id: ${{ inputs.splight_access_id }}
         splight_secret_key: ${{ inputs.splight_secret_key }}
