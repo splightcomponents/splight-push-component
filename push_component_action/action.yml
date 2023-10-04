@@ -1,0 +1,25 @@
+name: "Splight Push Component"
+description: "Automatically find components and upload them to Splight Hub."
+author: "Marco Martinelli"
+branding:
+  icon: 'upload-cloud'
+  color: 'green'
+inputs:
+  splight_access_id:
+    description: "Splight Hub access key id."
+    required: true
+  splight_secret_key:
+    description: "Splight Hub private key."
+    required: true
+  splight_platform_api_host:
+    description: "Splight platform API endpoint."
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - uses: ../build_image_action
+      with:
+        splight_access_id: ${{ inputs.splight_access_id }}
+        splight_secret_key: ${{ inputs.splight_secret_key }}
+        splight_platform_api_host: ${{ inputs.splight_platform_api_host }}
