@@ -13,6 +13,10 @@ from pydantic import BaseSettings
 logging.basicConfig(level=logging.INFO)
 
 
+class MoreThanOneSpecError(Exception):
+    ...
+
+
 class CLIConfig(BaseSettings):
     """Splight CLI configuration parameters."""
 
@@ -91,8 +95,6 @@ def main() -> None:
     if config.SPLIGHT_PLATFORM_API_HOST == "":
         config.SPLIGHT_PLATFORM_API_HOST = "https://api.splight-ai.com"
 
-    configure_cli(config.dict())
-
     files = find_files("./**/spec.json")
     if len(files) == 0:
         raise FileNotFoundError(
@@ -100,8 +102,15 @@ def main() -> None:
         )
     logging.info("Found these components: %s", files)
 
+    if len(files) > 1:
+        raise MoreThanOneSpecError("More than One spce.json file found.")
+    spec_file = files[0]
+
+    install_splight_cli(os.path.abspath(spec_file))
+
+    configure_cli(config.dict())
+
     for spec_file in files:
-        install_splight_cli(os.path.abspath(spec_file))
         push_component(os.path.dirname(os.path.abspath(spec_file)))
 
 
