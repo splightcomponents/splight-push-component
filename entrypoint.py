@@ -13,6 +13,10 @@ from pydantic import BaseSettings
 logging.basicConfig(level=logging.INFO)
 
 
+class MoreThanOneSpecError(Exception):
+    ...
+
+
 class CLIConfig(BaseSettings):
     """Splight CLI configuration parameters."""
 
@@ -43,7 +47,7 @@ def configure_cli(config: Dict) -> None:
 
 def push_component(path: str) -> None:
     """Push component using Splight CLI."""
-    logging.info("Tring to push component at '%s' ...", path)
+    logging.info("Trying to push component at '%s' ...", path)
     cmd = ["/usr/local/bin/splight", "hub", "component", "push", path, "-f"]
     with subprocess.Popen(cmd, text=True) as p:
         _, error = p.communicate()
@@ -58,6 +62,21 @@ def find_files(expr: str) -> List:
     """
     files = glob.glob(expr, recursive=True)
     return files
+
+
+def install_splight_cli(spec_path: str):
+    with open(spec_path, "r") as f:
+        spec_dict = json.load(f)
+    version = spec_dict["splight_cli_version"]
+
+    logging.info(f"Installing splight-cli {version}")
+    cmd = ["/usr/local/bin/pip", "install", f"splight-cli=={version}"]
+    with subprocess.Popen(cmd, text=True) as p:
+        _, error = p.communicate()
+        if error:
+            raise ChildProcessError(
+                f"Error while installing splight-cli: {error}"
+            )
 
 
 def main() -> None:
@@ -77,8 +96,6 @@ def main() -> None:
     if config.SPLIGHT_PLATFORM_API_HOST == "":
         config.SPLIGHT_PLATFORM_API_HOST = "https://api.splight-ai.com"
 
-    configure_cli(config.dict())
-
     files = find_files("./**/spec.json")
     if len(files) == 0:
         raise FileNotFoundError(
@@ -86,8 +103,14 @@ def main() -> None:
         )
     logging.info("Found these components: %s", files)
 
-    for spec_file in files:
-        push_component(os.path.dirname(os.path.abspath(spec_file)))
+    if len(files) > 1:
+        raise MoreThanOneSpecError("More than One spce.json file found.")
+    spec_file = files[0]
+
+    install_splight_cli(os.path.abspath(spec_file))
+
+    configure_cli(config.dict())
+    push_component(os.path.dirname(os.path.abspath(spec_file)))
 
 
 if __name__ == "__main__":
