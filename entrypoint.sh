@@ -1,3 +1,4 @@
+#!/bin/sh
 echo $INPUT_SPLIGHT_CLI_VERSION
 echo $SPLIGHT_CLI_VERSION
 
