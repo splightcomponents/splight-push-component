@@ -69,8 +69,16 @@ def install_splight_cli(spec_path: str):
         spec_dict = json.load(f)
     version = spec_dict["splight_cli_version"]
 
+    result = subprocess.run(
+        ["which", "pip"],
+        capture_output=True,
+        text=True
+    )
+    print(result.stdout)
+    print(result.stderr)
+
     logging.info(f"Installing splight-cli {version}")
-    cmd = ["/usr/bin/pip", "install", f"splight-cli=={version}"]
+    cmd = ["pip", "install", f"splight-cli=={version}"]
     with subprocess.Popen(cmd, text=True) as p:
         _, error = p.communicate()
         if error:
