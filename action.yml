@@ -5,9 +5,6 @@ branding:
   icon: 'upload-cloud'
   color: 'green'
 inputs:
-  splight_cli_version:
-    description: "Splight cli version."
-    required: true
   splight_access_id:
     description: "Splight Hub access key id."
     required: true
@@ -21,7 +18,6 @@ runs:
   using: "docker"
   image: "Dockerfile"
   args:
-    - ${{ inputs.splight_cli_version }}
     - ${{ inputs.splight_access_id }}
     - ${{ inputs.splight_secret_key }}
     - ${{ inputs.splight_platform_api_host }}
