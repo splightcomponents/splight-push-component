@@ -60,6 +60,20 @@ def find_files(expr: str) -> List:
     return files
 
 
+def install_splight_cli(spec_path: str):
+    spec_dict = json.load(spec_path)
+    version = spec_dict["splight_cli_version"]
+
+    logging.info(f"Installing splight-cli {version}")
+    cmd = ["/usr/bin/pip", "install", f"splight-cli=={version}"]
+    with subprocess.Popen(cmd, text=True) as p:
+        _, error = p.communicate()
+        if error:
+            raise ChildProcessError(
+                f"Error while installing splight-cli: {error}"
+            )
+
+
 def main() -> None:
     """Main process."""
     config = CLIConfig()
@@ -87,6 +101,7 @@ def main() -> None:
     logging.info("Found these components: %s", files)
 
     for spec_file in files:
+        install_splight_cli(os.path.abspath(spec_file))
         push_component(os.path.dirname(os.path.abspath(spec_file)))
 
 
