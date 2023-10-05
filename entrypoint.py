@@ -47,7 +47,7 @@ def configure_cli(config: Dict) -> None:
 
 def push_component(path: str) -> None:
     """Push component using Splight CLI."""
-    logging.info("Tring to push component at '%s' ...", path)
+    logging.info("Trying to push component at '%s' ...", path)
     cmd = ["/usr/local/bin/splight", "hub", "component", "push", path, "-f"]
     with subprocess.Popen(cmd, text=True) as p:
         _, error = p.communicate()
