@@ -65,7 +65,8 @@ def find_files(expr: str) -> List:
 
 
 def install_splight_cli(spec_path: str):
-    spec_dict = json.load(spec_path)
+    with open(spec_path, "r") as f:
+        spec_dict = json.load(f)
     version = spec_dict["splight_cli_version"]
 
     logging.info(f"Installing splight-cli {version}")
@@ -109,9 +110,7 @@ def main() -> None:
     install_splight_cli(os.path.abspath(spec_file))
 
     configure_cli(config.dict())
-
-    for spec_file in files:
-        push_component(os.path.dirname(os.path.abspath(spec_file)))
+    push_component(os.path.dirname(os.path.abspath(spec_file)))
 
 
 if __name__ == "__main__":
