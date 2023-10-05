@@ -74,8 +74,8 @@ def install_splight_cli(spec_path: str):
         capture_output=True,
         text=True
     )
-    print(result.stdout)
-    print(result.stderr)
+    logging.info(result.stdout)
+    logging.info(result.stderr)
 
     logging.info(f"Installing splight-cli {version}")
     cmd = ["pip", "install", f"splight-cli=={version}"]
