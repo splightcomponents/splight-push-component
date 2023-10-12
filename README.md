@@ -4,7 +4,7 @@ Automatically find and publish all components in your repository.
 
 ## Description
 
-This action will find all the Splight Components' configuration files ("spec.json") present in your repository, and push each component using the [Splight CLI](https://pypi.org/project/splight-cli/).
+This action will find the Splight Component configuration file ("spec.json") present in your repository, and push the component using the [Splight CLI](https://pypi.org/project/splight-cli/).
 
 ## Usage
 
